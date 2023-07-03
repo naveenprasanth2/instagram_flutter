@@ -1,6 +1,11 @@
+import 'dart:typed_data';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:image_picker/image_picker.dart';
+import 'package:instagram_flutter/resources/auth_methods.dart';
 import 'package:instagram_flutter/utils/colors.dart';
+import 'package:instagram_flutter/utils/utils.dart';
 import 'package:instagram_flutter/widgets/text_field_input.dart';
 
 class SignUpcreen extends StatefulWidget {
@@ -15,6 +20,7 @@ class _SignUpcreenState extends State<SignUpcreen> {
   final TextEditingController _passwordController = TextEditingController();
   final TextEditingController _bioController = TextEditingController();
   final TextEditingController _usernameComtroller = TextEditingController();
+  Uint8List? _image;
 
   @override
   void dispose() {
@@ -23,6 +29,13 @@ class _SignUpcreenState extends State<SignUpcreen> {
     _passwordController.dispose();
     _bioController.dispose();
     _usernameComtroller.dispose();
+  }
+
+  void selectImage() async {
+    Uint8List image = await pickImage(ImageSource.gallery);
+    setState(() {
+      _image = image;
+    });
   }
 
   @override
@@ -52,16 +65,23 @@ class _SignUpcreenState extends State<SignUpcreen> {
               //circular widget to show and select the picture
               Stack(
                 children: [
-                  const CircleAvatar(
-                    radius: 64,
-                    backgroundImage: NetworkImage(
-                        "https://images.unsplash.com/photo-1688300963512-ebb74dfd39e9?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxlZGl0b3JpYWwtZmVlZHwzfHx8ZW58MHx8fHx8&auto=format&fit=crop&w=800&q=60"),
-                  ),
+                  _image != null
+                      ? CircleAvatar(
+                          radius: 64,
+                          backgroundImage: MemoryImage(_image!),
+                        )
+                      : const CircleAvatar(
+                          radius: 64,
+                          backgroundImage: NetworkImage(
+                              "https://img.freepik.com/free-icon/user_318-563642.jpg?w=360"),
+                        ),
                   Positioned(
                       left: 80,
                       bottom: -10,
                       child: IconButton(
-                        onPressed: () {},
+                        onPressed: () {
+                          selectImage();
+                        },
                         icon: const Icon(
                           Icons.add_a_photo,
                           color: Colors.grey,
@@ -114,7 +134,15 @@ class _SignUpcreenState extends State<SignUpcreen> {
               ),
               //signup button
               InkWell(
-                onTap: () {},
+                onTap: () {
+                  AuthMethods().signUpUser(
+                    email: _emailController.text,
+                    password: _passwordController.text,
+                    username: _usernameComtroller.text,
+                    bio: _bioController.text,
+                    file: _image!,
+                  );
+                },
                 child: Container(
                   width: double.infinity,
                   alignment: Alignment.center,
