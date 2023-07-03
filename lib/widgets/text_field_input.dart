@@ -1,21 +1,22 @@
 import 'package:flutter/material.dart';
 
-class TextFieldInput extends StatelessWidget {
+class TextInputField extends StatelessWidget {
   final TextEditingController textEditingController;
   final String hintText;
-  bool isPass = false;
+  final bool isPass;
   final TextInputType textInputType;
-  TextFieldInput(
+  const TextInputField(
       {super.key,
       required this.textEditingController,
       required this.hintText,
-      required this.isPass,
+      this.isPass = true,
       required this.textInputType});
 
   @override
   Widget build(BuildContext context) {
-    final inputBorder =
-        OutlineInputBorder(borderSide: Divider.createBorderSide(context));
+    final inputBorder = OutlineInputBorder(
+        borderSide: Divider.createBorderSide(context),
+        borderRadius: BorderRadius.circular(10));
     return TextField(
       controller: textEditingController,
       decoration: InputDecoration(

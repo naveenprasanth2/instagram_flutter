@@ -1,19 +1,20 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:instagram_flutter/screens/signup_screen.dart';
 import 'package:instagram_flutter/utils/colors.dart';
 import 'package:instagram_flutter/widgets/text_field_input.dart';
 
-class LoginScreen extends StatefulWidget {
-  const LoginScreen({super.key});
+class SignUpcreen extends StatefulWidget {
+  const SignUpcreen({super.key});
 
   @override
-  State<LoginScreen> createState() => _LoginScreenState();
+  State<SignUpcreen> createState() => _SignUpcreenState();
 }
 
-class _LoginScreenState extends State<LoginScreen> {
+class _SignUpcreenState extends State<SignUpcreen> {
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
+  final TextEditingController _confirmPasswordController =
+      TextEditingController();
 
   @override
   void dispose() {
@@ -61,6 +62,15 @@ class _LoginScreenState extends State<LoginScreen> {
                 isPass: true,
               ),
               const SizedBox(
+                height: 24,
+              ),
+              TextInputField(
+                textEditingController: _confirmPasswordController,
+                hintText: "Confirm password",
+                textInputType: TextInputType.text,
+                isPass: true,
+              ),
+              const SizedBox(
                 height: 32,
               ),
               InkWell(
@@ -75,7 +85,7 @@ class _LoginScreenState extends State<LoginScreen> {
                     ),
                     color: blueColor,
                   ),
-                  child: const Text("Log in"),
+                  child: const Text("Sign Up"),
                 ),
               ),
               const SizedBox(
@@ -90,19 +100,16 @@ class _LoginScreenState extends State<LoginScreen> {
                 children: [
                   Container(
                     padding: const EdgeInsets.symmetric(vertical: 8),
-                    child: const Text("Don't have an account?"),
+                    child: const Text("Already have an account?"),
                   ),
                   GestureDetector(
                     onTap: () {
-                      Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (e) => const SignUpcreen()));
+                      Navigator.pop(context);
                     },
                     child: Container(
                       padding: const EdgeInsets.symmetric(vertical: 8),
                       child: const Text(
-                        "Sign up",
+                        "Log in",
                         style: TextStyle(fontWeight: FontWeight.bold),
                       ),
                     ),
