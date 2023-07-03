@@ -36,6 +36,7 @@ class _LoginScreenState extends State<LoginScreen> {
                 flex: 2,
                 child: Container(),
               ),
+              //instagram brand image
               SvgPicture.asset(
                 'assets/ic_instagram.svg',
                 colorFilter:
@@ -45,6 +46,7 @@ class _LoginScreenState extends State<LoginScreen> {
               const SizedBox(
                 height: 64,
               ),
+              //email field
               TextInputField(
                 textEditingController: _emailController,
                 hintText: "Enter your email",
@@ -54,6 +56,7 @@ class _LoginScreenState extends State<LoginScreen> {
               const SizedBox(
                 height: 24,
               ),
+              //password field
               TextInputField(
                 textEditingController: _passwordController,
                 hintText: "Enter your password",
@@ -63,6 +66,7 @@ class _LoginScreenState extends State<LoginScreen> {
               const SizedBox(
                 height: 32,
               ),
+              //login button
               InkWell(
                 onTap: () {},
                 child: Container(
@@ -85,6 +89,7 @@ class _LoginScreenState extends State<LoginScreen> {
                 flex: 2,
                 child: Container(),
               ),
+              //switch screen to signup
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
