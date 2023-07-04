@@ -3,10 +3,11 @@ import 'dart:typed_data';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:instagram_flutter/resources/auth_methods.dart';
 import 'package:instagram_flutter/utils/colors.dart';
 import 'package:instagram_flutter/utils/utils.dart';
 import 'package:instagram_flutter/widgets/text_field_input.dart';
+
+import '../resources/auth_methods.dart';
 
 class SignUpcreen extends StatefulWidget {
   const SignUpcreen({super.key});
@@ -35,6 +36,22 @@ class _SignUpcreenState extends State<SignUpcreen> {
     Uint8List image = await pickImage(ImageSource.gallery);
     setState(() {
       _image = image;
+    });
+  }
+
+  void signupUser() async {
+    await AuthMethods()
+        .signUpUser(
+      email: _emailController.text,
+      password: _passwordController.text,
+      username: _usernameComtroller.text,
+      bio: _bioController.text,
+      file: _image!,
+    )
+        .then((res) {
+      if (res != "success") {
+        showSnackBar(context, res);
+      }
     });
   }
 
@@ -134,15 +151,7 @@ class _SignUpcreenState extends State<SignUpcreen> {
               ),
               //signup button
               InkWell(
-                onTap: () {
-                  AuthMethods().signUpUser(
-                    email: _emailController.text,
-                    password: _passwordController.text,
-                    username: _usernameComtroller.text,
-                    bio: _bioController.text,
-                    file: _image!,
-                  );
-                },
+                onTap: signupUser,
                 child: Container(
                   width: double.infinity,
                   alignment: Alignment.center,
