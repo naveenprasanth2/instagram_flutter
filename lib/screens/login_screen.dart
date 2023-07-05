@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:instagram_flutter/resources/auth_methods.dart';
 import 'package:instagram_flutter/screens/signup_screen.dart';
 import 'package:instagram_flutter/utils/colors.dart';
+import 'package:instagram_flutter/utils/utils.dart';
 import 'package:instagram_flutter/widgets/text_field_input.dart';
 
 class LoginScreen extends StatefulWidget {
@@ -14,12 +16,32 @@ class LoginScreen extends StatefulWidget {
 class _LoginScreenState extends State<LoginScreen> {
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
+  final AuthMethods _authMethods = AuthMethods();
+  bool _isLoading = false;
 
   @override
   void dispose() {
     super.dispose();
     _emailController.dispose();
     _passwordController.dispose();
+  }
+
+  void signInUser() async {
+    setState(() {
+      _isLoading = true;
+    });
+    await _authMethods
+        .signInUser(
+            email: _emailController.text, password: _passwordController.text)
+        .then((res) {
+      setState(() {
+        _isLoading = false;
+      });
+
+      if (res != "success") {
+        showSnackBar(context, res);
+      }
+    });
   }
 
   @override
@@ -68,19 +90,21 @@ class _LoginScreenState extends State<LoginScreen> {
               ),
               //login button
               InkWell(
-                onTap: () {},
-                child: Container(
-                  width: double.infinity,
-                  alignment: Alignment.center,
-                  padding: const EdgeInsets.symmetric(vertical: 12),
-                  decoration: ShapeDecoration(
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(15),
-                    ),
-                    color: blueColor,
-                  ),
-                  child: const Text("Log in"),
-                ),
+                onTap: signInUser,
+                child: _isLoading
+                    ? const CircularProgressIndicator()
+                    : Container(
+                        width: double.infinity,
+                        alignment: Alignment.center,
+                        padding: const EdgeInsets.symmetric(vertical: 12),
+                        decoration: ShapeDecoration(
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(15),
+                          ),
+                          color: blueColor,
+                        ),
+                        child: const Text("Log in"),
+                      ),
               ),
               const SizedBox(
                 height: 12,

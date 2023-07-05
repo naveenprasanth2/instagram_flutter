@@ -22,6 +22,7 @@ class _SignUpcreenState extends State<SignUpcreen> {
   final TextEditingController _bioController = TextEditingController();
   final TextEditingController _usernameComtroller = TextEditingController();
   Uint8List? _image;
+  bool _isLoading = false;
 
   @override
   void dispose() {
@@ -40,6 +41,9 @@ class _SignUpcreenState extends State<SignUpcreen> {
   }
 
   void signupUser() async {
+    setState(() {
+      _isLoading = true;
+    });
     await AuthMethods()
         .signUpUser(
       email: _emailController.text,
@@ -49,6 +53,9 @@ class _SignUpcreenState extends State<SignUpcreen> {
       file: _image!,
     )
         .then((res) {
+      setState(() {
+        _isLoading = false;
+      });
       if (res != "success") {
         showSnackBar(context, res);
       }
@@ -152,18 +159,20 @@ class _SignUpcreenState extends State<SignUpcreen> {
               //signup button
               InkWell(
                 onTap: signupUser,
-                child: Container(
-                  width: double.infinity,
-                  alignment: Alignment.center,
-                  padding: const EdgeInsets.symmetric(vertical: 12),
-                  decoration: ShapeDecoration(
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(15),
-                    ),
-                    color: blueColor,
-                  ),
-                  child: const Text("Sign Up"),
-                ),
+                child: _isLoading
+                    ? const CircularProgressIndicator()
+                    : Container(
+                        width: double.infinity,
+                        alignment: Alignment.center,
+                        padding: const EdgeInsets.symmetric(vertical: 12),
+                        decoration: ShapeDecoration(
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(15),
+                          ),
+                          color: blueColor,
+                        ),
+                        child: const Text("Sign Up"),
+                      ),
               ),
               const SizedBox(
                 height: 12,

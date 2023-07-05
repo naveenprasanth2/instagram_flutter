@@ -51,4 +51,28 @@ class AuthMethods {
     }
     return res;
   }
+
+  Future<String> signInUser(
+      {required String email, required String password}) async {
+    String res = "some error occured";
+    try {
+      if (email.isNotEmpty && password.isNotEmpty) {
+        UserCredential userCredential = await _auth.signInWithEmailAndPassword(
+            email: email, password: password);
+        res = "success";
+      }
+    } on FirebaseAuthException catch (err) {
+      if (err.code == "invalid-email") {
+        res = "The email is badly formatted.";
+      } else if (err.code == "weak-password") {
+        res = "Password should be at least of 6 characters";
+      } else {
+        res = err.toString();
+      }
+    } catch (err) {
+      res = err.toString();
+    }
+
+    return res;
+  }
 }
