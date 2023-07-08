@@ -57,15 +57,17 @@ class AuthMethods {
     String res = "some error occured";
     try {
       if (email.isNotEmpty && password.isNotEmpty) {
-        UserCredential userCredential = await _auth.signInWithEmailAndPassword(
+        await _auth.signInWithEmailAndPassword(
             email: email, password: password);
         res = "success";
+      } else {
+        res = "Please enter all the feilds";
       }
     } on FirebaseAuthException catch (err) {
-      if (err.code == "invalid-email") {
-        res = "The email is badly formatted.";
-      } else if (err.code == "weak-password") {
-        res = "Password should be at least of 6 characters";
+      if (err.code == "user-not-found") {
+        res = "User is not found.";
+      } else if (err.code == "wrong-password") {
+        res = "Incorrect password";
       } else {
         res = err.toString();
       }
